@@ -1,9 +1,11 @@
 const lambda = require('./index');
 
+console.log("Testing click");
+
 lambda.handler({
   "serialNumber": "GXXXXXXXXXXXXXXXXX",
   "batteryVoltage": "xxmV",
-  "clickType": "SINGLE"
+  "clickType": "LONG"
 });
 
 // Documentation from the iot-button-email Lambda function blueprint:

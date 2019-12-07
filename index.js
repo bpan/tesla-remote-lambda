@@ -40,9 +40,13 @@ exports.handler = (event, context, callback) => {
               console.log("Handling " + event.clickType + " click");
               switch (event.clickType) {
                 case "SINGLE":
-                case "LONG":
                   tjs.doorUnlockAsync(options).then(() => {
                     console.log("Doors are now UNLOCKED");
+                  });
+                  break;
+                case "LONG":
+                  tjs.doorLockAsync(options).then(() => {
+                    console.log("Doors are now LOCKED");
                   });
                   break;
                 case "DOUBLE":
@@ -61,22 +65,22 @@ exports.handler = (event, context, callback) => {
   });
 
   const waitForOnline = (options, vehicle) => {
-    let counter = 4;
+    let counter = 5;
 
     const checkOnline = vehicle => {
       return new Promise(resolve => {
         const state = vehicle.state.toUpperCase();
         console.log("Vehicle state: " + state);
-        if (state.toUpperCase() === "ONLINE" || counter <= 1) {
+        if (state.toUpperCase() === "ONLINE" || counter <= 0) {
           resolve(vehicle);
         } else {
-          counter--;
           console.log("Waiting... " + counter);
           setTimeout(() => {
             tjs.vehicleAsync(options)
               .then(checkOnline)
               .then(resolve);
-          }, 4000 * counter);
+          }, 1000 * counter);
+          counter--;
         }
       });
     };
